@@ -49,6 +49,7 @@ class Game extends React.Component {
       stepNumber: 0,
       focusedStepNumber: null,
       xIsNext: true,
+      historyIsAscending: true,
     };
   }
 
@@ -78,6 +79,12 @@ class Game extends React.Component {
     });
   }
 
+  reverseHistory() {
+    this.setState({
+      historyIsAscending: !this.state.historyIsAscending,
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -101,12 +108,18 @@ class Game extends React.Component {
       );
     });
 
+    if (!this.state.historyIsAscending) {
+      moves.reverse();
+    }
+
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
+
+    const toggleMessage = (this.state.historyIsAscending ? '최근' : '과거') + ' 기록을 위로 정렬하기';
 
     return (
       <div className="game">
@@ -118,6 +131,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button onClick={() => this.reverseHistory()}>{toggleMessage}</button>
           <ol>{moves}</ol>
         </div>
       </div>
