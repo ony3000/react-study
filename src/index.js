@@ -52,6 +52,7 @@ class Game extends React.Component {
         position: null,
       }],
       stepNumber: 0,
+      focusedStepNumber: null,
       xIsNext: true,
     };
   }
@@ -77,6 +78,7 @@ class Game extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
+      focusedStepNumber: step,
       xIsNext: (step % 2) === 0,
     });
   }
@@ -93,8 +95,12 @@ class Game extends React.Component {
         const columnCount = step.position % 3 + 1;
         desc = `Go to move #${move} (${rowCount}행 ${columnCount}열)`;
       }
+      const className = (move === this.state.focusedStepNumber ? 'is-focused' : '');
       return (
-        <li key={move}>
+        <li
+          key={move}
+          className={className}
+        >
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
